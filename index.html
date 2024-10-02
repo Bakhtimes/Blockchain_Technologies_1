@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Model Marketplace</title>
+</head>
+<body>
+    <div class="container">
+        <h1>AI Model Marketplace</h1>
+        <section id="add-model">
+            <h2>List New AI Model</h2>
+            <form id="modelForm">
+                <input type="text" id="modelName" placeholder="Model Name" required>
+                <input type="text" id="modelDescription" placeholder="Model Description" required>
+                <input type="number" id="modelPrice" placeholder="Price (in Wei)" required>
+                <button type="submit">List Model</button>
+            </form>
+        </section>
+        
+        <section id="model-list">
+            <h2>Available Models</h2>
+            <div id="counter"></div>
+            <ul id="models"></ul>
+        </section>
+        
+        <section id="purchase-model">
+            <h2>Purchase Model</h2>
+            <h3 id="purchase-news"></h3>
+            <input type="number" id="purchaseModelId" placeholder="Model ID" required>
+            <button id="purchaseButton">Purchase</button>
+        </section>
+        
+        <section id="rate-model">
+            <h2>Rate Model</h2>
+            <input type="number" id="rateModelId" placeholder="Model ID" required>
+            <input type="number" id="modelRating" placeholder="Rating (1-5)" min="1" max="5" required>
+            <button id="rateButton">Rate Model</button>
+        </section>
+        
+        <section id="view-model">
+            <h2>View Model Details</h2>
+            <input type="number" id="viewModelId" placeholder="Model ID" required>
+            <button id="viewButton">View Details</button>
+            <div id="modelDetails"></div>
+        </section>
+        
+        <section id="withdraw-funds">
+            <h2>Withdraw Funds</h2>
+            <input type="number" id="withdrawModelId" placeholder="Model ID" required>
+            <button id="withdrawButton">Withdraw</button>
+        </section>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
