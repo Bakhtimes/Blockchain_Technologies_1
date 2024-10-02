@@ -269,7 +269,7 @@ const contractABI = [
     "constant": true
   }
 ];
-const contractAddress = '0xFeEfBB6E73eD1e4b4944D9956c925460f35a3bd0';
+const contractAddress = '0x287Fa05461bd002E38D028707dfa25B2eF7091e9';
 
 // Function to connect to MetaMask
 
@@ -278,13 +278,14 @@ const web3 = new Web3("http://127.0.0.1:7545");
 
 const contract = new web3.eth.Contract(contractABI, contractAddress);
 let account_l;
-let account = "0xb548DcF1a56a5A960d1c98e9Cf9c54FeE7714390";
+let account;
+//let account = "0x236F9913B129BbeD0f3Fdf1324d50DD7bDd66B99";
 
 async function getAccountGanache() {
 	try {
 		await web3.eth.getAccounts().then((accounts) => {
 			account_l = account;
-			account = accounts[0]; // Use the first account
+			account = accounts[0];
 			console.log(account);
 		});
 	} catch (error) {
@@ -299,11 +300,7 @@ async function listModelTest(name, description, price) {
   price = parseInt(price, 10);
   console.log(name, description, price);
 	try {
-		const a = await contract.methods.listModel(name, description, price).send({"from": account, "gas": GAS});
-		console.log(a);
-		const message = await contract.methods.getModelCount().call();
-		console.log(message);
-    alert(`Model listed successfully`);
+		await contract.methods.listModel(name, description, price).send({"from": account, "gas": GAS});
 	} catch(error) {
 		console.error('Error sending transaction:', error);
 	}
@@ -311,11 +308,10 @@ async function listModelTest(name, description, price) {
 
 
 
-// Initialize contract
 async function init() {
-    await getModels(); // Fetch and display models on load
+    await getModels();
 }
-
+init();
 
 
 // Function to list a new AI model
@@ -330,11 +326,10 @@ document.getElementById('modelForm').addEventListener('submit', async (event) =>
 
     await listModelTest(modelName, modelDescription, modelPrice);
 
-    //document.getElementById('modelForm').reset();
+    document.getElementById('modelForm').reset();
     await getModels();
 });
 
-// Function to fetch models
 async function getModels() {
     const modelList = document.getElementById('models');
     modelCount = await contract.methods.getModelCount().call();
@@ -342,7 +337,7 @@ async function getModels() {
     modelList.innerHTML = '';
 
     for (let i = 0; i < modelCount; i++) {
-        const model = await contract.methods.getModelDetails(i).call(); // Ensure you are passing 'i' as the index
+        const model = await contract.methods.getModelDetails(i).call();
         const listItem = document.createElement('li');
         listItem.textContent = `ID: ${i}, Name: ${model.name}, Description: ${model.description}, Price: ${model.price}`;
         modelList.appendChild(listItem);
@@ -351,7 +346,6 @@ async function getModels() {
 async function listModel(name, description, price) {
     const accounts = await web3.eth.getAccounts();
     
-    // Call the listModel function and pass in the necessary parameters
     await contract.methods.listModel(name, description, price).send({
         "from": accounts[0], "gas": GAS
     })
@@ -359,7 +353,6 @@ async function listModel(name, description, price) {
         console.log("Transaction Hash:", hash);
     })
     .on('receipt', function(receipt) {
-        // Access the model ID from the event logs or use another method to retrieve it
         const modelId = receipt.events.ModelListed.returnValues.modelId;
         console.log("Model ID:", modelId);
     })
@@ -368,7 +361,6 @@ async function listModel(name, description, price) {
     });
 }
 
-// Function to purchase a model
 document.getElementById('purchaseButton').addEventListener('click', async () => {
     var modelId = document.getElementById('purchaseModelId').value;
     modelId = parseInt(modelId, 10);
@@ -383,13 +375,11 @@ async function purchaseModel(modelId) {
 		    const model = await contract.methods.getModelDetails(modelId).call(); 
         console.log(model.price);
         const price = parseInt(model.price, 10);
-        //const priceInWei = web3.utils.to(price, 'ether');
         await contract.methods.purchaseModel(modelId).send({
-                      from: account, // The user's address
-                      value: price  // Ether value in Wei
+                      from: account, 
+                      value: price 
                   })
                   alert("Purchased model");
-        // Call the payable function with the specified Ether value
         
     } catch (error) {
         console.error("Error purchasing model:", error);
@@ -411,7 +401,13 @@ document.getElementById('viewButton').addEventListener('click', async () => {
     const modelDetails = await contract.methods.getModelDetails(modelId).call();
     
     const detailsDiv = document.getElementById('modelDetails');
-    detailsDiv.innerHTML = `Name: ${modelDetails.name}, Description: ${modelDetails.description}, Price: ${modelDetails.price}, Creator: ${modelDetails.creator}, Average Rating: ${modelDetails.rating / modelDetails.ratingCount}`;
+    var rating = 0;
+    if (modelDetails.ratingCount == 0) {
+      rating = 0;
+    } else {
+      rating = modelDetails.rating / modelDetails.ratingCount;
+    }
+    detailsDiv.innerHTML = `Name: ${modelDetails.name}, Description: ${modelDetails.description}, Price: ${modelDetails.price}, Creator: ${modelDetails.creator}, Average Rating: ${rating}`;
 });
 
 // Function to withdraw funds
@@ -421,6 +417,3 @@ document.getElementById('withdrawButton').addEventListener('click', async () => 
     await contract.methods.withdrawFunds(modelId).send({ from: account });
     alert("Withdrawn");
 });
-
-// Initialize the app
-init();

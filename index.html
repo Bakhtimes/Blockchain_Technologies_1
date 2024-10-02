@@ -4,6 +4,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Model Marketplace</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .model-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+        }
+        .model {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -11,21 +60,21 @@
         <section id="add-model">
             <h2>List New AI Model</h2>
             <form id="modelForm">
-                <input type="text" id="modelName" placeholder="Model Name" required>
-                <input type="text" id="modelDescription" placeholder="Model Description" required>
-                <input type="number" id="modelPrice" placeholder="Price (in Wei)" required>
-                <button type="submit">List Model</button>
+                <input type="text" id="modelName" placeholder="Name" required>
+                <input type="text" id="modelDescription" placeholder="Description" required>
+                <input type="number" id="modelPrice" placeholder="Price" required>
+                <button type="submit">List</button>
             </form>
         </section>
         
         <section id="model-list">
             <h2>Available Models</h2>
-            <div id="counter"></div>
-            <ul id="models"></ul>
+            Number of models: <span id="counter"></span>
+            <ol id="models"></ol>
         </section>
         
         <section id="purchase-model">
-            <h2>Purchase Model</h2>
+            <h2>Purchase a Model</h2>
             <h3 id="purchase-news"></h3>
             <input type="number" id="purchaseModelId" placeholder="Model ID" required>
             <button id="purchaseButton">Purchase</button>
@@ -35,7 +84,7 @@
             <h2>Rate Model</h2>
             <input type="number" id="rateModelId" placeholder="Model ID" required>
             <input type="number" id="modelRating" placeholder="Rating (1-5)" min="1" max="5" required>
-            <button id="rateButton">Rate Model</button>
+            <button id="rateButton">Rate</button>
         </section>
         
         <section id="view-model">
@@ -46,7 +95,7 @@
         </section>
         
         <section id="withdraw-funds">
-            <h2>Withdraw Funds</h2>
+            <h2>Withdraw Your Funds</h2>
             <input type="number" id="withdrawModelId" placeholder="Model ID" required>
             <button id="withdrawButton">Withdraw</button>
         </section>
